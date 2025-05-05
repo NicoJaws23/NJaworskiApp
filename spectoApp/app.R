@@ -30,12 +30,17 @@ ui <- fluidPage(
                    value = 5,
                    min = 0.25,
                    max = 20, step = 0.25),
-      uiOutput("timeInput"),
-      checkboxInput("logScale", "Log Frequency Scale", value = FALSE)
+      uiOutput("timeInput")
     ),
     
     # Show a plot of the generated distribution
     mainPanel(
+      h2("How it works"),
+      p("This app will visualize and analyze a wav audio file. User can browse for and
+             upload a desired wav file. After it is uploaded, the app will generate a spectogram and a
+             data table with some basic metrics of the audio. The user can adjust the maximum frequency being displayed along
+             with the time stamps of specific audio elements by adjusting the min and max time options to narrow down the recording.
+             Users can also change the windown length to change the frequency and time resolution of the spectogram."),
       plotOutput("spectrogram"),
       dataTableOutput("metrics")
     )
@@ -62,7 +67,6 @@ server <- function(input, output) {
     wav_file <- readWave(input$audio$datapath)
     spectro(wav_file,
             wl = input$wl,
-            log = input$logScale,
             flim = c(0, input$f),
             tlim = c(input$Mint, input$Maxt)
     )
@@ -95,6 +99,7 @@ server <- function(input, output) {
     )
     df
   })
+  
 }
 
 # Run the application
